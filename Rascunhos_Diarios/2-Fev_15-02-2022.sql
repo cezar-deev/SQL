@@ -209,3 +209,56 @@ COD_JUNTA NOT LIKE '#%' AND
 NIVEL_INSPECAO='II'
 
 
+//-------------------------------------
+
+SELECT 
+JNT.COD_JUNTA  AS JOINT,
+SUBSTRING(TRE.SOLDADORES FROM 6 FOR 8) AS WELDER_ID_SIGNET,
+SUBSTRING(TRE.SOLDADORES FROM 1 FOR 4) AS WELD_PROC,
+'Ultrasonic Testing' AS INSPECTION,
+'IE - Note 1' AS DEFECT_TYPE,
+DFT.FILMESREPROVADOS AS QTY_FILM,
+DFT.FILMESREPROVADOS AS REPROVED_FILM,
+DFT.EXTENSAOINSP AS INSPECTED_LENGTH,
+DFT.PROF AS PROF_DEFEITO,
+DFT.EXTENSAODEF AS DEFECT_LENGTH,
+DFT.TIPO_DEFEITO,
+JNT.ESPESSURA1,
+JNT.ESPESSURA2,
+JNI.TIPO_JUNTA,
+DFT.DATA AS DATA_DEF,
+JNI.STATUSUS,
+JNI.US AS REL_US
+
+      FROM TRETRECHO TRE 
+      INNER JOIN JNTJUNTA JNT ON TRE.PJNTJUNTA = JNT.BOLD_ID
+      INNER JOIN VW_DEFEITOS DFT ON DFT.COD_TRECHO = TRE.COD_TRECHO 
+      LEFT JOIN VW_JUNTAINSPECIONADA JNI ON JNI.COD_JUNTA = JNT.COD_JUNTA 
+
+           WHERE DFT.DATA>= '2022-02-01'
+               ORDER BY 2
+
+
+// ---------------------------------------------
+
+select
+jnt.cod_junta joint,
+ISI.LOTE_US,
+ISI.PERCENT_US,
+JNT.NIVEL_INSPECAO,
+ISI.TIPO_JUNTA,
+jnt.extensao,
+decode(jnt.execucao
+, 0, 'OFC'
+, 1, 'MNT'
+, 2, 'PMN'
+, 3, 'EDF') as stage,
+jnt.statusus ut,
+isi.US_data
+
+        from vw_isireport_juntainspecionada isi
+        inner join jntjunta jnt on jnt.cod_junta = isi.cod_junta
+        left join attdi att on jnt.bold_id = att.pjntjunta
+
+             where jnt.cod_junta like '%SMP-063/B1-02%'
+             order by 1
