@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+  <script type='text/javascript'
+    src='https://www.google.com/jsapi'></script>
+    <script type='text/javascript'>
+	  //importando o pacote table
+      google.load('visualization', '1', {packages:['table']});
+	  //metodo que será chamado após
+      google.setOnLoadCallback(drawTable);
+      function drawTable() {
+		//instanciando array do formado de tabela
+        var data = new google.visualization.DataTable();
+		//adicionando colunas, tipo e nome
+        data.addColumn('string', 'Aluno');
+        data.addColumn('number', 'Nota');
+        data.addColumn('boolean', 'Aprovado');
+		//adicionando linhas
+        data.addRows([
+          ['Allan',  {v: 10, f: '10'}, true],
+          ['Douglas',   {v:8,   f: '8'},  true],
+          ['Larissa', {v: 5.5, f: '5,5'}, false],
+          ['Eliane',   {v: 7,  f: '7'},  true]
+        ]);
+		//instanciando e desenhando tabela
+        var table =
+        new google.visualization.Table(document.getElementById('table_div'));
+        table.draw(data, {showRowNumber: true});
+      }
+  </script>    
+  
+
+</head>
+<body>
+  <div id='table_div'></div>
+</body>
+</html>
+
