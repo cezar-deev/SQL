@@ -85,3 +85,10 @@ body {
     
     
 }
+
+.pastas {
+    display: flex;
+    border: 0.4px solid #df6706;
+    border-radius: 8px 0px 8px 0px;
+    margin-top: 10px;
+}
