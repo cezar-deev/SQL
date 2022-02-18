@@ -86,9 +86,37 @@ body {
     
 }
 
-.pastas {
+.acessos {
     display: flex;
+    flex-direction: row;
     border: 0.4px solid #df6706;
-    border-radius: 8px 0px 8px 0px;
-    margin-top: 10px;
+    border-radius: 12px 0px 12px 0px;
+    margin-top: 19px;
+    font-family: 'Sarala', sans-serif;
+    font-size: 7px;
+    font-style: italic;
+    width: 280px;
+    margin-left: 10px;
+    gap: 15px;
+}
+
+.acessos-pastas {
+    display: flex;
+    flex-direction: column;
+    width: 40px;
+}
+
+.acessos-pastas-nome {
+    display: flex;
+    flex-direction: column;
+    gap: 21px;
+    margin-top: 25px;
+    color: rgba(42, 42, 235, 0.733);
+}
+
+.acessos-botoes {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+
 }
