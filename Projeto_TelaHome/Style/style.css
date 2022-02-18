@@ -65,20 +65,21 @@ body {
 .menu-esq {
     display: flex;
     flex-direction: row;
-    gap: 150px;
-    padding: 15px 100px;
+    gap: 145px;
+    padding: 15px 105px;
     border: 0.4px solid #0e0d0d;
     background: #050505;
     color: white;
     
 }
 
+
 .menu-dir {
     display: flex;
     flex-direction: row;
-    gap: 150px;
+    gap: 145px;
     border: 0.4px solid #0e0d0d;
-    padding: 15px 100px;
+    padding: 15px 105px;
     background: #050505;
     color: white;
     
