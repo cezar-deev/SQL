@@ -15,7 +15,7 @@ body {
 }
 
 .cabecalho-imagem {
-    height: 63px;
+    height: 60px;
     padding: 10px 68px 10px 68px ;
     border: 0.4px solid #df6706;
     border-radius: 8px 0px 8px 0px;
@@ -24,14 +24,13 @@ body {
 .cabecalho {
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: space-around;
-    padding: 22px;
+    padding-top: 20px;
+    padding-bottom: 2px;
     font-family: 'Sarala', sans-serif;
     font-size: 9px;
     font-style: italic;
     
-
 }
 
 .cabecalho-titulo-esq {
@@ -50,4 +49,38 @@ body {
     border-radius: 8px;
     background: #050505;
     color: white;
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    font-family: 'Sarala', sans-serif;
+    font-size: 6px;
+    font-style: italic;
+    gap: 11px;
+    
+}
+
+.menu-esq {
+    display: flex;
+    flex-direction: row;
+    gap: 150px;
+    padding: 15px 100px;
+    border: 0.4px solid #0e0d0d;
+    background: #050505;
+    color: white;
+    
+}
+
+.menu-dir {
+    display: flex;
+    flex-direction: row;
+    gap: 150px;
+    border: 0.4px solid #0e0d0d;
+    padding: 15px 100px;
+    background: #050505;
+    color: white;
+    
+    
 }
