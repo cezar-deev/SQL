@@ -1,0 +1,37 @@
+
+-- Junção das 2 consultas
+
+
+SELECT 
+         S.AREA,
+         S.SINETE,
+         V.PROCESSO_SOLDAGEM AS PROCESSO,
+         S.NOME,
+ CASE 
+            WHEN 
+            S.DTENTRADA='1899.12.30' 
+            THEN '' 
+            ELSE SUBSTRING (S.DTENTRADA  from 1 for 10 ) END AS ENTRADA,
+
+ CASE 
+            WHEN 
+            S.DTAFASTAMENTO='1899.12.30' 
+            THEN '' 
+            ELSE SUBSTRING (S.DTAFASTAMENTO  from 1 for 10 ) END AS AFASTAMENTO,
+
+ CASE 
+            WHEN 
+            S.DTSAIDA='1899.12.30' 
+            THEN '' 
+            ELSE SUBSTRING (S.DTSAIDA  from 1 for 10 ) END AS SAIDA,
+
+            COUNT(V.JUNTA) AS QTD_JT_SOLDADA
+                      
+FROM 
+    SOLSOLDADOR S INNER JOIN VW_SOLDA V ON (S.SINETE=V.SINETE)
+
+    WHERE S.AREA='JURONG'
+
+GROUP BY S.AREA,S.SINETE,S.NOME,S.DTENTRADA,S.DTSAIDA,S.DTAFASTAMENTO,V.PROCESSO_SOLDAGEM
+
+ORDER BY S.SINETE,V.PROCESSO_SOLDAGEM

@@ -119,3 +119,107 @@ atd.data_descarregamento as data_Desc
                         cod,        
                         data_Desc
 
+
+//-----------------------------------------------------------
+
+
+select
+    mdl.nome_modulo as Sub_Bloco,
+    dmt.cod_dm as Modulo,
+    dfb.cod_df as DF,
+    dfb.romaneio as SMP,
+    dfb.tipo_estrutura as Fabricante, 
+    cmp.cod_componente,
+    cmp.componente as Componente,
+        case
+        when cmp.tipo_componente = 0 then 'PERFIL'
+        when cmp.tipo_componente = 1 then 'TUBO'
+        when cmp.tipo_componente = 2 then 'CONE'
+        when cmp.tipo_componente = 3 then 'CHAPA TRAP'
+        when cmp.tipo_componente = 4 then 'CHAPA'
+        when cmp.tipo_componente = 5 then 'ANEL'
+        when cmp.tipo_componente = 6 then 'BARRA'
+        when cmp.tipo_componente = 7 then 'CAP'
+        when cmp.tipo_componente = 8 then 'FLANGE'
+        when cmp.tipo_componente = 9 then 'CURVA'
+        else ''
+    end as Tipo,
+
+    dfb.desenhobr as Desenho,
+    cmp.Peso,
+    pct.cod_pc as Plano_de_Corte,
+
+    case 
+        when mpr.cod_mp is null then 'Pendente' else 'Aprov' 
+    end as Status_Corte, 
+
+    case 
+        when cmp.datacorte='1899.12.30' then ' ' else 
+                cast(substring (cmp.datacorte from 9 for 2 )as varchar(2)) 
+        ||'/'|| cast(substring (cmp.datacorte from 6 for 2 )as varchar(2))
+        ||'/'|| cast(substring (cmp.datacorte from 1 for 4 )as varchar(4))
+
+
+    end as Data_Corte,
+
+    mpr.cod_mp as Material,
+    cmp.Status_Comp as Status_Componentes
+
+        from  cmpcomponente cmp
+        left join pctplano_corte pct on pct.bold_id = cmp.ppctpcorte
+        left join dfbdesenhofabricacao dfb on dfb.bold_id = cmp.pdfbdf
+        left join crtcorte crt on crt.ppctplanocorte = pct.bold_id
+        left join mprmateriaprima mpr on mpr.bold_id = crt.pmprmateriaprima
+        left join dmtdesenhomontagem dmt on dmt.bold_id = dfb.pdmtdm
+        left join mdlmodulo mdl on mdl.bold_id = dmt.pmdlmodulo
+
+where dmt.cod_dm is not null         
+order by 1,2,3,6
+
+
+SELECT 
+        pct.cod_pc as Plano_Corte,
+        pct.datacorte,
+        crt.codensaio
+
+FROM 
+        pctplano_corte pct left join crtcorte crt on (pct.bold_id = crt.PPCTPLANOCORTE)
+where 
+        pct.cod_pc='M0008A01'or
+        pct.cod_pc='M0025A03'or
+        pct.cod_pc='M0025E01'or
+        pct.cod_pc='M12B10A03'or
+        pct.cod_pc='M12B10A04'or
+        pct.cod_pc='M12B10A07'or
+        pct.cod_pc='M12C09A04'or
+        pct.cod_pc='M12C09A05'or
+        pct.cod_pc='M1406A02'or
+        pct.cod_pc='M1410A02'
+
+
+------------------------------------------------------
+
+SELECT 
+        AREA,
+        SINETE, 
+        NOME,
+        DTENTRADA,
+        DTAFASTAMENTO,
+        DTSAIDA
+FROM 
+     SOLSOLDADOR
+
+WHERE AREA='JURONG' AND SINETE LIKE 'EJA%'
+
+ORDER BY AREA,SINETE
+
+
+--------------------------------------------------------------------------
+
+SELECT  W.SINETE,
+        W.PROCESSO_SOLDAGEM,
+        W.COUNT(JUNTA) AS QTD_AS
+FROM VW_SOLDA
+
+GROUP BY W.SINETE,W.PROCESSO_SOLDAGEM
+ORDER BY W.SINETE

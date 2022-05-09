@@ -1,0 +1,13 @@
+
+-- Soldadores com baixas por processo
+
+SELECT  
+    SINETE,
+    PROCESSO_SOLDAGEM,
+    COUNT(JUNTA) AS QTD_AS
+FROM 
+    VW_SOLDA
+GROUP BY SINETE,PROCESSO_SOLDAGEM
+ORDER BY SINETE
+
+
