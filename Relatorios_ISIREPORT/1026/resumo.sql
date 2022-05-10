@@ -12,6 +12,9 @@ SELECT
            END
     END AS peso_total,
 
+    --------------------------------------------------------------------------------------
+    --percentual_jato--
+    --------------------------------------------------------------------------------------
     coalesce(SUM(tbl.jato_realizado), 0) AS peso_jato,
     CASE
       WHEN SUM(tbl.fundo_realizado) IS NULL THEN
@@ -31,6 +34,9 @@ SELECT
                                       END
     END AS perc_jato,
 
+    --------------------------------------------------------------------------------------
+    --percentual_fundo
+    --------------------------------------------------------------------------------------
     coalesce(SUM(tbl.fundo_realizado), 0) AS peso_fundo,
     CASE
       WHEN SUM(tbl.fundo_realizado) IS NULL THEN
@@ -50,6 +56,9 @@ SELECT
                                       END
     END AS perc_fundo,
 
+    --------------------------------------------------------------------------------------
+    --percentual_indetermed1
+    --------------------------------------------------------------------------------------
     coalesce(SUM(tbl.interm_realizado1), 0) AS peso_intermed1,
     CASE
       WHEN SUM(tbl.interm_realizado1) IS NULL THEN
@@ -69,6 +78,9 @@ SELECT
                                        END
     END AS perc_intermed1,
 
+    --------------------------------------------------------------------------------------
+     --percentual_indetermed2
+    --------------------------------------------------------------------------------------
     coalesce(SUM(tbl.interm_realizado2), 0) AS peso_intermed2,
     CASE
       WHEN SUM(tbl.interm_realizado2) IS NULL THEN
@@ -87,13 +99,17 @@ SELECT
                                               END
                                        END
     END AS perc_intermed2,
-
+    
+    --------------------------------------------------------------------------------------
+    --percentual_acab
+    --------------------------------------------------------------------------------------
     coalesce(SUM(tbl.acab_realizado), 0) AS peso_acabamento,
     CASE
       WHEN SUM(tbl.acab_realizado) IS NULL THEN
           0
-      ELSE SUM(tbl.acab_realizado) / CASE
-                                       WHEN SUM(tbl.peso_df) IS NULL THEN
+          --somar acab relaizado / Peso do df ou dm
+      ELSE SUM(tbl.acab_realizado) / CASE 
+                                       WHEN SUM(tbl.peso_df) IS NULL THEN 
                                            CASE
                                              WHEN MAX(tbl.peso_dm) = 0 THEN
                                                  1
