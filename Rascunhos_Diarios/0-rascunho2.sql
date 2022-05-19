@@ -1,4 +1,5 @@
 
+
 // COM DATA ESPECIFICA //
 
 select crs.nome,crs.cod_coletor as cod,
@@ -214,7 +215,7 @@ WHERE AREA='JURONG' AND SINETE LIKE 'EJA%'
 ORDER BY AREA,SINETE
 
 
---------------------------------------------------------------------------
+------------------------------------------------------------
 
 SELECT  W.SINETE,
         W.PROCESSO_SOLDAGEM,
@@ -223,3 +224,44 @@ FROM VW_SOLDA
 
 GROUP BY W.SINETE,W.PROCESSO_SOLDAGEM
 ORDER BY W.SINETE
+
+SELECT eja
+
+-----------------------------------------
+18/05/2021
+-----------------------------------------
+-- PENDENCIA DE PINTURA NA MONTAGEM - SQL 1
+
+select
+dfb.romaneio as SMP,
+dmt.cod_dm as DM,
+dfb.cod_df as DF,
+dfb.statusDI_MNT as DI_MNT,
+dfb.statusPI_MNT as PINT_MNT,
+STATUS_DF_MNT
+
+from dfbdesenhofabricacao dfb
+join dmtdesenhomontagem dmt on dmt.bold_id = dfb.pdmtdm
+join cnpcodicaopintura cnp on cnp.bold_id = dfb.pcnpcodpin
+where
+ dfb.STATUSPI_MNT  <> 'AP' AND dfb.STATUSPI_MNT  <> 'NA' AND dfb.TIPO_ESTRUTURA = 'JURONG'
+
+ORDER BY 1,2,3
+
+--------------------------------------------
+-- PENDENCIA DE PINTURA NA MONTAGEM - SQL 2
+
+SELECT
+mdl.NOME_MODULO,
+dfb.cod_df,
+dfb.STATUSPI,
+dfb.statuspi_mnt,
+atd.TIPO_ATD 
+
+FROM DFBDESENHOFABRICACAO dfb 
+INNER JOIN DMTDESENHOMONTAGEM dmt ON dfb.PDMTDM  = dmt.BOLD_ID 
+INNER JOIN MDLMODULO mdl ON mdl.BOLD_ID  = dmt.PMDLMODULO
+INNER JOIN ATDATIVIDADE atd ON atd.PDFBDF = dfb.BOLD_ID 
+
+WHERE dfb.TIPO_ESTRUTURA = 'JURONG' AND dfb.STATUSPI_MNT = ' 'AND atd.TIPO_ATD = 'MNT'
+
