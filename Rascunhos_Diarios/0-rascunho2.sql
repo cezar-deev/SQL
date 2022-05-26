@@ -265,3 +265,243 @@ INNER JOIN ATDATIVIDADE atd ON atd.PDFBDF = dfb.BOLD_ID
 
 WHERE dfb.TIPO_ESTRUTURA = 'JURONG' AND dfb.STATUSPI_MNT = ' 'AND atd.TIPO_ATD = 'MNT'
 
+-----------------------------------------
+19/05/2021
+-----------------------------------------
+--PENDENCIA GERAL - CSC PINT/DIM
+
+SELECT
+dfb.TIPO_ESTRUTURA as LOCAL,
+mdl.NOME_MODULO as modulo,
+dmt.Cod_DM,
+dfb.romaneio as SMP,
+dfb.cod_df,
+dfb.PESO_TOTAL,
+case
+        when dfb.PCNPCODPIN = 273083 then 'PI-001'
+        when dfb.PCNPCODPIN = 291140 then 'PI-002'
+        when dfb.PCNPCODPIN = 291141 then 'PI-003'
+        when dfb.PCNPCODPIN = 291142 then 'PI-004'      
+        else ''
+end as CONDPI_FAB,
+case
+        when dfb.PCNPCODPIN2 = 273083 then 'PI-001'
+        when dfb.PCNPCODPIN2 = 291140 then 'PI-002'
+        when dfb.PCNPCODPIN2 = 291141 then 'PI-003'
+        when dfb.PCNPCODPIN2 = 291142 then 'PI-004'      
+        else ''
+end as CONDPI_MON,
+dfb.statusdi as DIMENSIONAL_FAB,
+dfb.STATUSPI as Pintura_FAB,
+dfb.statusdi_MNT as DIMENSIONAL_MNT,
+dfb.STATUSPI_MNT as Pintura_MON
+
+
+FROM DFBDESENHOFABRICACAO dfb 
+INNER JOIN DMTDESENHOMONTAGEM dmt ON dfb.PDMTDM  = dmt.BOLD_ID
+INNER JOIN MDLMODULO mdl ON mdl.BOLD_ID  = dmt.PMDLMODULO
+WHERE dfb.TIPO_ESTRUTURA = 'JURONG' 
+ORDER BY 1,2,4
+
+--------------------------------
+-- MATERIA PRIMA
+
+select
+    mdl.nome_modulo as Modulo,
+    dmt.cod_dm as DM,
+    dfb.cod_df as DF,
+    cmp.cod_componente,
+    pct.cod_pc as Plano_de_Corte,
+    mpr.cod_mp as Materia_Prima,
+    mpr.certificado
+
+        from  cmpcomponente cmp
+        left join pctplano_corte pct on pct.bold_id = cmp.ppctpcorte
+        left join dfbdesenhofabricacao dfb on dfb.bold_id = cmp.pdfbdf
+        left join crtcorte crt on crt.ppctplanocorte = pct.bold_id
+        left join mprmateriaprima mpr on mpr.bold_id = crt.pmprmateriaprima
+        left join dmtdesenhomontagem dmt on dmt.bold_id = dfb.pdmtdm
+        left join mdlmodulo mdl on mdl.bold_id = dmt.pmdlmodulo
+        
+where  dfb.cod_df is not null   
+order by 1,2,3,6
+
+
+-----------------------------------------
+20/05/2021
+-----------------------------------------
+
+--SITUAÇÃO DE JUNTAS DF
+SELECT 
+CASE 
+  WHEN 
+     PECA_1 IS NULL 
+     THEN SUB_MONTAGEM 
+      ELSE PECA_1 END AS DF,
+COUNT(COD_JUNTA) AS TOTAL,
+
+CASE
+  WHEN 
+     STATUS_JUNTA LIKE 'Finaliz%'
+     THEN 'Finalized'
+      ELSE 'Junta Pendente' END AS Status
+
+FROM VW_JUNTAINSPECIONADA
+WHERE COD_JUNTA NOT LIKE '#%'
+
+GROUP BY DF,Status
+
+-----------------------------------------
+23/05/2021
+-----------------------------------------
+
+-- RESUMO DIMENSIONAL-FAB
+SELECT
+mdl.NOME_MODULO,
+COUNT(dfb.cod_df) AS QTD
+
+FROM DFBDESENHOFABRICACAO dfb 
+INNER JOIN DMTDESENHOMONTAGEM dmt ON dfb.PDMTDM  = dmt.BOLD_ID
+INNER JOIN MDLMODULO mdl ON mdl.BOLD_ID  = dmt.PMDLMODULO
+
+WHERE dfb.TIPO_ESTRUTURA = 'JURONG'  AND dfb.statusdi <>'AP'
+
+GROUP BY mdl.NOME_MODULO,dfb.TIPO_ESTRUTURA
+
+----------------------------------------------------------
+
+--RESUMO DIMENSIONAL-MON 
+SELECT
+mdl.NOME_MODULO,
+COUNT(dfb.cod_df) AS QTD
+
+FROM DFBDESENHOFABRICACAO dfb 
+INNER JOIN DMTDESENHOMONTAGEM dmt ON dfb.PDMTDM  = dmt.BOLD_ID
+INNER JOIN MDLMODULO mdl ON mdl.BOLD_ID  = dmt.PMDLMODULO
+
+WHERE dfb.TIPO_ESTRUTURA = 'JURONG'  AND dfb.statusdi_MNT <>'AP'
+
+GROUP BY mdl.NOME_MODULO
+
+----------------------------------------------------------
+
+-- RESUMO PINTURA-FAB
+SELECT
+mdl.NOME_MODULO,
+COUNT(dfb.cod_df) AS QTD
+
+FROM DFBDESENHOFABRICACAO dfb 
+INNER JOIN DMTDESENHOMONTAGEM dmt ON dfb.PDMTDM  = dmt.BOLD_ID
+INNER JOIN MDLMODULO mdl ON mdl.BOLD_ID  = dmt.PMDLMODULO
+
+WHERE dfb.TIPO_ESTRUTURA = 'JURONG' AND dfb.STATUSPI <>'AP'
+
+GROUP BY mdl.NOME_MODULO
+
+
+----------------------------------------------------------
+
+-- RESUMO PINTURA-MNT
+SELECT
+mdl.NOME_MODULO,
+COUNT(dfb.cod_df) AS QTD
+
+FROM DFBDESENHOFABRICACAO dfb 
+INNER JOIN DMTDESENHOMONTAGEM dmt ON dfb.PDMTDM  = dmt.BOLD_ID
+INNER JOIN MDLMODULO mdl ON mdl.BOLD_ID  = dmt.PMDLMODULO
+
+WHERE dfb.TIPO_ESTRUTURA = 'JURONG' AND dfb.STATUSPI_MNT <>'AP'
+
+GROUP BY mdl.NOME_MODULO
+
+----------------------------------------------------------
+
+
+--RESUMO DE PENDENCIAS( EXCETO SMP )
+SELECT
+SUB_BLOCO,
+painel,
+COUNT(COD_JUNTA) AS QTD_PENDENTE
+
+FROM VW_JUNTAINSPECIONADA
+
+WHERE COD_JUNTA NOT LIKE '#%' AND COD_JUNTA NOT LIKE '%SMP%' AND STATUS_JUNTA NOT LIKE 'Finaliz%'
+
+GROUP BY painel,SUB_BLOCO
+
+----------------------------------------
+24/06/2022
+----------------------------------------
+--DF- COM PENDENCIA
+SELECT 
+CASE 
+  WHEN 
+     PECA_1 IS NULL 
+     THEN SUB_MONTAGEM 
+      ELSE PECA_1 END AS DF,
+COUNT(COD_JUNTA) AS QTD_JUNTA,
+'Com Pendencia'
+
+FROM VW_JUNTAINSPECIONADA
+WHERE COD_JUNTA NOT LIKE '#%' AND STATUS_JUNTA NOT LIKE 'Finaliz%'
+
+GROUP BY DF
+ORDER BY 1
+
+
+-------------------------------
+--DF- TODAL DE JUNTAS
+SELECT 
+CASE 
+  WHEN 
+     PECA_1 IS NULL 
+     THEN SUB_MONTAGEM 
+      ELSE PECA_1 END AS DF,
+COUNT(COD_JUNTA) AS QTD_JUNTAS
+
+FROM VW_JUNTAINSPECIONADA
+WHERE COD_JUNTA NOT LIKE '#%' 
+
+GROUP BY DF
+ORDER BY 1
+
+
+
+
+
+
+
+
+--------------------------------------------
+26/05/2022
+--------------------------------------------
+-- DI-FAB
+SELECT
+mdl.NOME_MODULO AS MODULO,
+DFB.ROMANEIO AS SMP,
+DMT.COD_DM AS DM,
+COUNT(dfb.cod_df) AS QTD
+
+FROM DFBDESENHOFABRICACAO dfb 
+INNER JOIN DMTDESENHOMONTAGEM dmt ON dfb.PDMTDM  = dmt.BOLD_ID
+INNER JOIN MDLMODULO mdl ON mdl.BOLD_ID  = dmt.PMDLMODULO
+
+WHERE dfb.TIPO_ESTRUTURA = 'JURONG'  AND dfb.statusdi <>'AP'
+
+GROUP BY mdl.NOME_MODULO,dfb.TIPO_ESTRUTURA,ROMANEIO,DMT.COD_DM
+
+------------------------------------------------
+--DI-MONT
+SELECT
+mdl.NOME_MODULO,
+DFB.ROMANEIO AS SMP,
+DMT.COD_DM AS DM,
+COUNT(dfb.cod_df) AS QTD
+
+FROM DFBDESENHOFABRICACAO dfb 
+INNER JOIN DMTDESENHOMONTAGEM dmt ON dfb.PDMTDM  = dmt.BOLD_ID
+INNER JOIN MDLMODULO mdl ON mdl.BOLD_ID  = dmt.PMDLMODULO
+
+WHERE dfb.TIPO_ESTRUTURA = 'JURONG'  AND dfb.statusdi_MNT <>'AP'
+
+GROUP BY mdl.NOME_MODULO,dfb.TIPO_ESTRUTURA,ROMANEIO,DMT.COD_DM
