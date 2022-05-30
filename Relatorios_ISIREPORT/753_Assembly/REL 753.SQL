@@ -70,9 +70,4 @@ and a.cod_dm <> 'M10'
 and a.cod_dm <> 'M13'
 and a.cod_dm not like  '%SS%'
 
-
-
-//-----------------------
-
-
   where dfb.tipo_estrutura = 'JURONG' and mdl.nome_modulo like 'M11B%'

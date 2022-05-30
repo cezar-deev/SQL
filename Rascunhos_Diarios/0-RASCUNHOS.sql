@@ -47,8 +47,6 @@ ens.data_descarregamento as data_Desc
                         data_Desc
 
 
-
-
 //----------------------------------------------------------------------
 
 
@@ -303,6 +301,7 @@ INNER JOIN MDLMODULO mdl ON mdl.BOLD_ID  = dmt.PMDLMODULO
 WHERE dfb.TIPO_ESTRUTURA = 'JURONG' 
 ORDER BY 1,2,4
 
+
 --------------------------------
 -- MATERIA PRIMA
 
@@ -465,13 +464,6 @@ WHERE COD_JUNTA NOT LIKE '#%'
 GROUP BY DF
 ORDER BY 1
 
-
-
-
-
-
-
-
 --------------------------------------------
 26/05/2022
 --------------------------------------------
@@ -495,7 +487,6 @@ GROUP BY mdl.NOME_MODULO,dfb.TIPO_ESTRUTURA,ROMANEIO,DMT.COD_DM
 SELECT
 mdl.NOME_MODULO,
 DFB.ROMANEIO AS SMP,
-DMT.COD_DM AS DM,
 COUNT(dfb.cod_df) AS QTD
 
 FROM DFBDESENHOFABRICACAO dfb 
@@ -504,4 +495,4 @@ INNER JOIN MDLMODULO mdl ON mdl.BOLD_ID  = dmt.PMDLMODULO
 
 WHERE dfb.TIPO_ESTRUTURA = 'JURONG'  AND dfb.statusdi_MNT <>'AP'
 
-GROUP BY mdl.NOME_MODULO,dfb.TIPO_ESTRUTURA,ROMANEIO,DMT.COD_DM
+GROUP BY mdl.NOME_MODULO,dfb.TIPO_ESTRUTURA,ROMANEIO

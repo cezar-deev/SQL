@@ -1,5 +1,7 @@
 
+-- SITUAÇÃO DAS JUNTAS DO FD
 
+-------------------------------
 --DF- COM PENDENCIA
 SELECT 
 CASE 
@@ -32,3 +34,15 @@ WHERE COD_JUNTA NOT LIKE '#%'
 
 GROUP BY DF
 ORDER BY 1
+
+------------------------------------------------
+
+SELECT 
+COD_JUNTA,
+TIPO,
+COUNT(CASE WHEN TIPO = 'MNT' OR TIPO ='PMN' OR TIPO ='EDF' THEN '1' ELSE '0' END AS OBS)
+
+FROM VW_JUNTAINSPECIONADA
+WHERE COD_JUNTA NOT LIKE '#%' 
+
+GROUP BY COD_JUNTA,TIPO
