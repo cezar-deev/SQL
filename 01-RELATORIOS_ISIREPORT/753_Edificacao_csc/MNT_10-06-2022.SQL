@@ -1,3 +1,4 @@
+
 select *
 from(select
     dados.projeto
@@ -52,13 +53,14 @@ from
         dfbdesenhofabricacao dfb
         inner join dmtdesenhomontagem dmt on dfb.pdmtdm = dmt.bold_id
         inner join mdlmodulo mdl on dmt.pmdlmodulo = mdl.bold_id
-        left join gat_avancodf_mnt av on av.pdfbdf = dfb.bold_id
+        left join gat_avancodf_edf av on av.pdfbdf = dfb.bold_id
     
-   where dfb.tipo_estrutura = 'JURONG' ) dados
+   where dfb.tipo_estrutura = 'JURONG' and av.jnt_qtd is not null) dados  -- ( csc ) Acrecentado : and av.jnt_qtd is not null --
     where dados.nome_modulo not like '%EQP-BASES%' 
 group by 1, 2, 3)a
-where  a.cod_dm not like '%BDE%'
-and a.cod_dm <>'CAISSON'
+where  
+    a.cod_dm <>'CAISSON'
+and a.cod_dm not like '%BDE%'
 and a.cod_dm <>'FORECASTLE'
 and a.cod_dm <>'M00-LDPF/TR'
 and a.cod_dm <>'MAIN DECK'
@@ -68,6 +70,4 @@ and a.cod_dm <> 'PPS'
 and a.cod_dm <> 'M08'
 and a.cod_dm <> 'M10'
 and a.cod_dm <> 'M13'
-and a.cod_dm not like  '%SS%'
-
-  where dfb.tipo_estrutura = 'JURONG' and mdl.nome_modulo like 'M11B%'
+and a.cod_dm not like  'SS%'

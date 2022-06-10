@@ -37,6 +37,6 @@ from
     dfbdesenhofabricacao dfb
     inner join dmtdesenhomontagem dmt on dfb.pdmtdm = dmt.bold_id
     inner join mdlmodulo mdl on dmt.pmdlmodulo = mdl.bold_id
-    left join gat_avancodf_mnt av on av.pdfbdf = dfb.bold_id
+    left join gat_avancodf_edf av on av.pdfbdf = dfb.bold_id
 where
-    dfb.cod_df not like '%FND%' and dfb.tipo_estrutura <> 'TERCIARIA' and mdl.nome_modulo not like '%EQP-BASES%' -- and dmt.cod_dm not like '%R%'
+    dfb.cod_df not like '%FND%' and dfb.tipo_estrutura <> 'TERCIARIA' and mdl.nome_modulo not like '%EQP-BASES%' and av.jnt_qtd is not null  -- and dmt.cod_dm not like '%R%'
