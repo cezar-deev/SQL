@@ -30,8 +30,9 @@ from
         end as sem_programada_va
 
         , decode(coalesce(av.jnt_qtd, 0), 0, decode(dfb.status_df_fab, 'Liberado Para Montagem', dfb.peso_total, 0), coalesce(((cast(av.va_jnt_qtd as float) / cast(av.jnt_qtd as float)) * dfb.peso_total), 0)) as peso_va
+
         , decode(coalesce(av.jnt_qtd, 0), 0, decode(dfb.status_df_fab, 'Liberado Para Montagem', 1, 0), coalesce(((cast(av.va_jnt_qtd as float) / cast(av.jnt_qtd as float))), 0)) as perc_va
-        
+
         , case
           when substring(dfb.no2 from 4 for 3) = '---' then ''
           else substring(dfb.no2 from 4 for 3)
