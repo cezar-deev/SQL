@@ -449,7 +449,7 @@ ORDER BY 1
 
 
 -------------------------------
---DF- TODAL DE JUNTAS
+--DF- TOTAL DE JUNTAS
 SELECT 
 CASE 
   WHEN 
